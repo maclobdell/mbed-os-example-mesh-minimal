@@ -19,11 +19,11 @@ try {
 
 // Map RaaS instances to corresponding test suites
 def raas = [
-  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json"
-  //"8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
-  //"8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
-  //"8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
-  //"8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
+  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json",
+  "8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
+  "8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
+  "8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
+  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
   ]
 
 // List of targets with supported RF shields to compile
@@ -117,7 +117,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 
           if ("${meshInterface}" == "6lp") {
           // Use systest border router for testing
-            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 18/' mbed_app.json")
+            execute("sed -i 's/\"mbed-mesh-api.6lowpan-nd-channel\": 12/\"mbed-mesh-api.6lowpan-nd-channel\": 11/' mbed_app.json")
           }
 
           // Set mbed-os to revision received as parameter
