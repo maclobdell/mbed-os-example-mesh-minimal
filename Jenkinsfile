@@ -12,35 +12,29 @@ try {
   env.MBED_OS_REVISION = "${mbed_os_revision}"
 }
 
-def smoke_test = false
-if (getBinding().hasVariable("runTests")) {
-  smoke_test = runTests
-}
-
-
 // Map RaaS instances to corresponding test suites
 def raas = [
-  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json",
-  "8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
-  "8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
-  "8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
-  "8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
+  "8001": "lowpan_mesh_minimal_smoke_k64f_atmel.json"
+  //"8034": "lowpan_mesh_minimal_smoke_k64f_mcr20.json",
+  //"8030": "lowpan_mesh_minimal_smoke_429zi_atmel.json",
+  //"8033": "lowpan_mesh_minimal_smoke_429zi_mcr20.json",
+  //"8031": "lowpan_mesh_minimal_smoke_ublox_atmel.json"
   ]
 
 // List of targets with supported RF shields to compile
 def targets = [
   "K64F": ["ATMEL", "MCR20"],
   //"NUCLEO_F401RE": ["ATMEL", "MCR20"],
-  "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
+  //"NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
-  "UBLOX_EVK_ODIN_W2": ["ATMEL"]
+  //"UBLOX_EVK_ODIN_W2": ["ATMEL"]
   ]
   
 // Map toolchains to compilers
 def toolchains = [
-  ARM: "armcc",
-  GCC_ARM: "arm-none-eabi-gcc",
-  IAR: "iar_arm"
+  //ARM: "armcc",
+  GCC_ARM: "arm-none-eabi-gcc"
+  //IAR: "iar_arm"
   ]
 
 // Supported RF shields
@@ -78,19 +72,18 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (Boolean.valueOf(smoke_test)) {
-
+if (Boolean.valueOf(runTests)) {
   def parallelRunSmoke = [:]
-  for(int i = 0; i < raas.size(); i++) {
+
+  for(int i = 0; i < raas.size(); i++){
     def raasPort = raas.keySet().asList().get(i)
     parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
-
   }
 }
 
 timestamps {
   parallel stepsForParallel
-  if (Boolean.valueOf(smoke_test)) {
+  if (Boolean.valueOf(runTests)) {
     parallel parallelRunSmoke
   }
 }
