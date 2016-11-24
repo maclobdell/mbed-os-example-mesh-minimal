@@ -77,7 +77,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (Boolean.valueOf( smoke_test )) {
+if (smoke_test) {
   def parallelRunSmoke = [:]
 
   for(int i = 0; i < raas.size(); i++){
@@ -88,7 +88,7 @@ if (Boolean.valueOf( smoke_test )) {
 
 timestamps {
   parallel stepsForParallel
-  if (Boolean.valueOf( smoke_test )) {
+  if (smoke_test) {
     parallel parallelRunSmoke
   }
 }
