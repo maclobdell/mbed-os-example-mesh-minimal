@@ -76,7 +76,7 @@ for (int i = 0; i < targets.size(); i++) {
 
 def parallelRunSmoke = [:]
 
-if (smoke_test) {
+if ( ${smoke_test} == "true" ) {
   for(int i = 0; i < raas.size(); i++){
     def raasPort = raas.keySet().asList().get(i)
     parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
