@@ -1,5 +1,4 @@
-properties ([[
-  $class: 'ParametersDefinitionProperty', parameterDefinitions: [
+properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
   [$class: 'BooleanParameterDefinition', name: 'runTests', defaultValue: false, description: 'Set true to run smoke test']
   ]]])
@@ -12,6 +11,12 @@ try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
   env.MBED_OS_REVISION = "${mbed_os_revision}"
 }
+
+def smoke_test = false
+if (getBinding().hasVariable("runTests")) {
+  smoke_test = runTests
+}
+
 
 // Map RaaS instances to corresponding test suites
 def raas = [
@@ -73,18 +78,19 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (Boolean.valueOf(runTests)) {
-  def parallelRunSmoke = [:]
+if (Boolean.valueOf(smoke_test)) {
 
-  for(int i = 0; i < raas.size(); i++){
+  def parallelRunSmoke = [:]
+  for(int i = 0; i < raas.size(); i++) {
     def raasPort = raas.keySet().asList().get(i)
     parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
+
   }
 }
 
 timestamps {
   parallel stepsForParallel
-  if (Boolean.valueOf(runTests)) {
+  if (Boolean.valueOf(smoke_test)) {
     parallel parallelRunSmoke
   }
 }
