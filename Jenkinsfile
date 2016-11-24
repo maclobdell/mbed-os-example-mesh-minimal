@@ -23,7 +23,7 @@ def raas = [
 
 // List of targets with supported RF shields to compile
 def targets = [
-  "K64F": ["ATMEL", "MCR20"],
+  "K64F": ["ATMEL", "MCR20"]
   //"NUCLEO_F401RE": ["ATMEL", "MCR20"],
   //"NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
@@ -39,15 +39,15 @@ def toolchains = [
 
 // Supported RF shields
 def radioshields = [
-  "ATMEL",
-  "MCR20",
-  "NCS36510"
+  "ATMEL"
+  //"MCR20",
+  //"NCS36510"
   ]
 
 // Mesh interfaces: 6LoWPAN and Thread
 def meshinterfaces = [
-  "6lp",
-  "thd"
+  "6lp"
+  //"thd"
   ]
   
 def stepsForParallel = [:]
