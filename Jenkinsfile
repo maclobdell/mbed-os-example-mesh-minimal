@@ -3,6 +3,11 @@ properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'BooleanParameterDefinition', name: 'runTests', defaultValue: false, description: 'Set true to run smoke test']
   ]]])
 
+def smoke_test = false
+if (getBinding().hasVariable("runTests")) {
+  smoke_test = runTests
+}
+
 try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
   env.MBED_OS_REVISION = "${mbed_os_revision}"
@@ -72,7 +77,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (Boolean.valueOf( ${runTests} )) {
+if (Boolean.valueOf( smoke_test )) {
   def parallelRunSmoke = [:]
 
   for(int i = 0; i < raas.size(); i++){
@@ -83,7 +88,7 @@ if (Boolean.valueOf( ${runTests} )) {
 
 timestamps {
   parallel stepsForParallel
-  if (Boolean.valueOf( ${runTests} )) {
+  if (Boolean.valueOf( smoke_test )) {
     parallel parallelRunSmoke
   }
 }
