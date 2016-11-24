@@ -74,9 +74,9 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (runTests) {
   def parallelRunSmoke = [:]
 
+if (runTests) {
   for(int i = 0; i < raas.size(); i++){
     def raasPort = raas.keySet().asList().get(i)
     parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
@@ -85,9 +85,7 @@ if (runTests) {
 
 timestamps {
   parallel stepsForParallel
-  if (runTests) {
-    parallel parallelRunSmoke
-  }
+  parallel parallelRunSmoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
