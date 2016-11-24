@@ -72,7 +72,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-if (Boolean.valueOf(runTests)) {
+if (Boolean.valueOf( ${runTests} )) {
   def parallelRunSmoke = [:]
 
   for(int i = 0; i < raas.size(); i++){
@@ -83,7 +83,7 @@ if (Boolean.valueOf(runTests)) {
 
 timestamps {
   parallel stepsForParallel
-  if (Boolean.valueOf(runTests)) {
+  if (Boolean.valueOf( ${runTests} )) {
     parallel parallelRunSmoke
   }
 }
