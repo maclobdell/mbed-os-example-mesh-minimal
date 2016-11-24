@@ -1,9 +1,9 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
-  [$class: 'BooleanParameterDefinition', name: 'runTests', defaultValue: false, description: 'Enable to run smoke test after building']
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
   ]]])
 
-echo "Run smoke tests: ${runTests}"
+echo "Run smoke tests: ${smoke_test}"
 
 try {
   echo "Verifying build with mbed-os version ${mbed_os_revision}"
@@ -34,9 +34,9 @@ def targets = [
   
 // Map toolchains to compilers
 def toolchains = [
-  //ARM: "armcc",
-  GCC_ARM: "arm-none-eabi-gcc"
-  //IAR: "iar_arm"
+  ARM: "armcc",
+  GCC_ARM: "arm-none-eabi-gcc",
+  IAR: "iar_arm"
   ]
 
 // Supported RF shields
@@ -74,9 +74,9 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-  def parallelRunSmoke = [:]
+def parallelRunSmoke = [:]
 
-if (runTests) {
+if (smoke_test) {
   for(int i = 0; i < raas.size(); i++){
     def raasPort = raas.keySet().asList().get(i)
     parallelRunSmoke[raasPort] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raas, raasPort)
@@ -129,6 +129,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
         }
         stash name: "${target}_${toolchain}_${radioShield}_${meshInterface}", includes: '**/mbed-os-example-mesh-minimal.bin'
         archive '**/mbed-os-example-mesh-minimal.bin'
+        step([$class: 'WsCleanup'])
       }
     }
   }
