@@ -88,6 +88,7 @@ if ( smoke_test == "true" ) {
     def suite_to_run = raas.keySet().asList().get(i)
     def raasPort = raas.get(suite_to_run)
     def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
+    echo "Smoke step: ${smokeStep}"
     parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
@@ -111,6 +112,7 @@ def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
 def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run) {
   return {
     def suiteName = suite_to_run.substring(0, suite_to_run.indexOf('.'))
+    echo "Stage: smoke_${raasPort}_${suiteName}"
     stage ("smoke_${raasPort}_${suiteName}") {
       node ("linux_test") {
         deleteDir()
@@ -124,7 +126,8 @@ def run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite
                 def radioshield = radioshields.get(k)
                 def meshInterface = meshinterfaces.get(l)
                 if(allowed_shields.contains(radioshield)) {
-                  unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
+                  echo "Unstashing: ${target}_${toolchain}_${radioshield}_${meshInterface}"
+                  //unstash "${target}_${toolchain}_${radioshield}_${meshInterface}"
                 }
               }
             }
