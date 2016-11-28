@@ -89,13 +89,13 @@ if ( smoke_test == "true" ) {
     def raasPort = raas.get(suite_to_run)
     def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
     echo "Smoke step: ${smokeStep}"
-    def parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
 timestamps {
   parallel stepsForParallel
-  parallelRunSmoke
+  run_smoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
