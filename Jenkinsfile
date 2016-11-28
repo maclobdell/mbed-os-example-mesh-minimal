@@ -79,7 +79,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-//def parallelRunSmoke = [:]
+def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
 if ( smoke_test == "true" ) {
@@ -89,12 +89,13 @@ if ( smoke_test == "true" ) {
     def raasPort = raas.get(suite_to_run)
     def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
     echo "Smoke step: ${smokeStep}"
-    run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
 timestamps {
   parallel stepsForParallel
+  parallel parallelRunSmoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
