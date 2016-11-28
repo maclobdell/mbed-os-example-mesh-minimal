@@ -95,7 +95,6 @@ if ( smoke_test == "true" ) {
 
 timestamps {
   parallel stepsForParallel
-  run_smoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
