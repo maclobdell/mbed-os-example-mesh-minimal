@@ -79,7 +79,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-def parallelRunSmoke = [:]
+//def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
 if ( smoke_test == "true" ) {
@@ -95,7 +95,7 @@ if ( smoke_test == "true" ) {
 
 timestamps {
   parallel stepsForParallel
-  parallel parallelRunSmoke
+  parallelRunSmoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
