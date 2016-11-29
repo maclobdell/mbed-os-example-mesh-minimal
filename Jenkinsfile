@@ -83,14 +83,16 @@ for (int i = 0; i < targets.size(); i++) {
           def meshInterface = meshinterfaces.get(l)
 
           def targetCompiler = targetCompilers.keySet().asList().get(m)
-          echo "TARGETCOMPILER: ${targetCompiler}"
+          echo "TARGET_COMPILER: ${targetCompiler}"
           def allowed_compilers = targetCompilers.get(targetCompiler)
-          echo "ALLOWEDCOMPILERS: ${allowed_compilers} VS. ${toolchain}"
+          echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
           def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
-          echo "ALL STEPS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
           if( allowed_shields.contains(radioshield) ) { //&& allowed_compilers.contains(toolchain) ) 
-            echo "BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            echo "SHIELDS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            if (allowed_compilers.contains(toolchain)) {
+              echo "BUILD_COMPILERS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            }
             //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
           }
           else {
