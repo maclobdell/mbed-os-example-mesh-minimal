@@ -1,6 +1,6 @@
 properties ([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
   [$class: 'StringParameterDefinition', name: 'mbed_os_revision', defaultValue: 'master', description: 'Revision of mbed-os to build'],
-  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: true, description: 'Enable to run HW smoke test after building']
+  [$class: 'BooleanParameterDefinition', name: 'smoke_test', defaultValue: false, description: 'Enable to run HW smoke test after building']
   ]]])
 
 echo "Run smoke tests: ${smoke_test}"
@@ -31,10 +31,19 @@ def raas = [
 // List of targets with supported RF shields to compile
 def targets = [
   "K64F": ["ATMEL", "MCR20"],
-  //"NUCLEO_F401RE": ["ATMEL", "MCR20"],
+  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
   "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
   "UBLOX_EVK_ODIN_W2": ["ATMEL"]
+  ]
+
+// List of targets with supported RF shields to compile
+def targetCompilers = [
+  "K64F": ["ARM", "GCC_ARM", "IAR"],
+  "NUCLEO_F401RE": ["ARM", "GCC_ARM"],
+  "NUCLEO_F429ZI": ["ARM", "GCC_ARM", "IAR"],
+  //"NCS36510": ["ARM", "GCC_ARM", "IAR"],
+  "UBLOX_EVK_ODIN_W2": ["ARM", "GCC_ARM", "IAR"]
   ]
   
 // Map toolchains to compilers
@@ -64,15 +73,26 @@ for (int i = 0; i < targets.size(); i++) {
   for(int j = 0; j < toolchains.size(); j++) {
     for(int k = 0; k < radioshields.size(); k++) {
       for(int l = 0; l < meshinterfaces.size(); l++) {
-        def target = targets.keySet().asList().get(i)
-        def allowed_shields = targets.get(target)
-        def toolchain = toolchains.keySet().asList().get(j)
-        def compilerLabel = toolchains.get(toolchain)
-        def radioshield = radioshields.get(k)
-        def meshInterface = meshinterfaces.get(l)
-        def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
-        if(allowed_shields.contains(radioshield)) {
-          stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+        for(int m = 0; m < targetCompilers.size(); m++) {
+
+          def target = targets.keySet().asList().get(i)
+          def allowed_shields = targets.get(target)
+          def toolchain = toolchains.keySet().asList().get(j)
+          def compilerLabel = toolchains.get(toolchain)
+          def radioshield = radioshields.get(k)
+          def meshInterface = meshinterfaces.get(l)
+
+          def targetCompiler = targetCompilers.keySet().asList().get(m)
+          echo "TARGETCOMPILER: ${targetCompiler}"
+          def allowed_compilers = targetCompilers.get(targetCompiler)
+          echo "ALLOWEDCOMPILERS: ${allowed_compilers}"
+
+          def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
+          echo "ALL STEPS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+          if( allowed_shields.contains(radioshield) && allowed_compilers.contains(toolchain) ) {
+            echo "ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+          }
         }
       }
     }
