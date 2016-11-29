@@ -66,7 +66,7 @@ def meshinterfaces = [
   "thd"
   ]
   
-def stepsForParallel = [:]
+//def stepsForParallel = [:]
 
 // Jenkins pipeline does not support map.each, we need to use oldschool for loop
 for (int i = 0; i < targets.size(); i++) {
@@ -85,13 +85,16 @@ for (int i = 0; i < targets.size(); i++) {
           def targetCompiler = targetCompilers.keySet().asList().get(m)
           echo "TARGETCOMPILER: ${targetCompiler}"
           def allowed_compilers = targetCompilers.get(targetCompiler)
-          echo "ALLOWEDCOMPILERS: ${allowed_compilers}"
+          echo "ALLOWEDCOMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
           def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
           echo "ALL STEPS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
           if( allowed_shields.contains(radioshield) && allowed_compilers.contains(toolchain) ) {
             echo "ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
-            stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+            //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+          }
+          else {
+            echo "NOT ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
           }
         }
       }
@@ -99,7 +102,7 @@ for (int i = 0; i < targets.size(); i++) {
   }
 }
 
-def parallelRunSmoke = [:]
+//def parallelRunSmoke = [:]
 
 // Need to compare boolean against string value
 if ( smoke_test == "true" ) {
@@ -109,13 +112,13 @@ if ( smoke_test == "true" ) {
     def raasPort = raas.get(suite_to_run)
     def smokeStep = "${raasPort} ${suite_to_run.substring(0, suite_to_run.indexOf('.'))}"
     echo "Smoke step: ${smokeStep}"
-    parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
+    //parallelRunSmoke[smokeStep] = run_smoke(targets, toolchains, radioshields, meshinterfaces, raasPort, suite_to_run)
   }
 }
 
 timestamps {
-  parallel stepsForParallel
-  parallel parallelRunSmoke
+  //parallel stepsForParallel
+  //parallel parallelRunSmoke
 }
 
 def buildStep(target, compilerLabel, toolchain, radioShield, meshInterface) {
