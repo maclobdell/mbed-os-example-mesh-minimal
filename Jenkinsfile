@@ -89,12 +89,12 @@ for (int i = 0; i < targets.size(); i++) {
 
           def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
           echo "ALL STEPS: ${target} ${toolchain} ${radioshield} ${meshInterface}"
-          if( allowed_compilers.contains(toolchain) ) {
-            echo "ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+          if( allowed_shields.contains(radioshield) ) { //&& allowed_compilers.contains(toolchain) ) 
+            echo "BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
             //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
           }
           else {
-            echo "NOT ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            echo "NOT_ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
           }
         }
       }
