@@ -31,19 +31,10 @@ def raas = [
 // List of targets with supported RF shields to compile
 def targets = [
   "K64F": ["ATMEL", "MCR20"],
-  "NUCLEO_F401RE": ["ATMEL", "MCR20"]
-  //"NUCLEO_F429ZI": ["ATMEL", "MCR20"],
+  "NUCLEO_F401RE": ["ATMEL", "MCR20"],
+  "NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
-  //"UBLOX_EVK_ODIN_W2": ["ATMEL"]
-  ]
-
-// List of targets with supported RF shields to compile
-def targetCompilers = [
-  "K64F": ["ARM", "GCC_ARM", "IAR"],
-  "NUCLEO_F401RE": ["ARM", "GCC_ARM"]
-  //"NUCLEO_F429ZI": ["ARM", "GCC_ARM", "IAR"],
-  //"NCS36510": ["ARM", "GCC_ARM", "IAR"],
-  //"UBLOX_EVK_ODIN_W2": ["ARM", "GCC_ARM", "IAR"]
+  "UBLOX_EVK_ODIN_W2": ["ATMEL"]
   ]
   
 // Map toolchains to compilers
@@ -80,10 +71,6 @@ for (int i = 0; i < targets.size(); i++) {
         def compilerLabel = toolchains.get(toolchain)
         def radioshield = radioshields.get(k)
         def meshInterface = meshinterfaces.get(l)
-
-        //def targetCompiler = targetCompilers.keySet().asList().get(m)
-        //def allowed_compilers = targetCompilers.get(targetCompiler)
-        //echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
         if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
           echo "NO2: ${target} ${toolchain} ${radioshield} ${meshInterface}"
