@@ -30,7 +30,7 @@ def raas = [
 
 // List of targets with supported RF shields to compile
 def targets = [
-  //"K64F": ["ATMEL", "MCR20"],
+  "K64F": ["ATMEL", "MCR20"],
   "NUCLEO_F401RE": ["ATMEL", "MCR20"]
   //"NUCLEO_F429ZI": ["ATMEL", "MCR20"],
   //"NCS36510": ["NCS36510"],
@@ -39,7 +39,7 @@ def targets = [
 
 // List of targets with supported RF shields to compile
 def targetCompilers = [
-  //"K64F": ["ARM", "GCC_ARM", "IAR"],
+  "K64F": ["ARM", "GCC_ARM", "IAR"],
   "NUCLEO_F401RE": ["ARM", "GCC_ARM"]
   //"NUCLEO_F429ZI": ["ARM", "GCC_ARM", "IAR"],
   //"NCS36510": ["ARM", "GCC_ARM", "IAR"],
@@ -83,17 +83,16 @@ for (int i = 0; i < targets.size(); i++) {
           def meshInterface = meshinterfaces.get(l)
 
           def targetCompiler = targetCompilers.keySet().asList().get(m)
-          echo "TARGET: ${targetCompiler}"
           def allowed_compilers = targetCompilers.get(targetCompiler)
           echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
           def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
           if( allowed_shields.contains(radioshield) && allowed_compilers.contains(toolchain) ) {
-            echo "BUILD_ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            echo "BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
             //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
           }
           else {
-            echo "NOT_ALLOWED: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+            echo "NOT_BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
           }
         }
       }
