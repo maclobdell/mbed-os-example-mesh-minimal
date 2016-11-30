@@ -87,7 +87,7 @@ for (int i = 0; i < targets.size(); i++) {
 
         if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
           echo "NO2: ${target} ${toolchain} ${radioshield} ${meshInterface}"
-          return
+          continue
         }
 
         def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
