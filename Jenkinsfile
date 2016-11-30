@@ -83,7 +83,7 @@ for (int i = 0; i < targets.size(); i++) {
 
         //def targetCompiler = targetCompilers.keySet().asList().get(m)
         //def allowed_compilers = targetCompilers.get(targetCompiler)
-        echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
+        //echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
         if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
           echo "NO2: ${target} ${toolchain} ${radioshield} ${meshInterface}"
