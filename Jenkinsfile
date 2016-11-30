@@ -73,27 +73,30 @@ for (int i = 0; i < targets.size(); i++) {
   for(int j = 0; j < toolchains.size(); j++) {
     for(int k = 0; k < radioshields.size(); k++) {
       for(int l = 0; l < meshinterfaces.size(); l++) {
-        for(int m = 0; m < targetCompilers.size(); m++) {
 
-          def target = targets.keySet().asList().get(i)
-          def allowed_shields = targets.get(target)
-          def toolchain = toolchains.keySet().asList().get(j)
-          def compilerLabel = toolchains.get(toolchain)
-          def radioshield = radioshields.get(k)
-          def meshInterface = meshinterfaces.get(l)
+        def target = targets.keySet().asList().get(i)
+        def allowed_shields = targets.get(target)
+        def toolchain = toolchains.keySet().asList().get(j)
+        def compilerLabel = toolchains.get(toolchain)
+        def radioshield = radioshields.get(k)
+        def meshInterface = meshinterfaces.get(l)
 
-          def targetCompiler = targetCompilers.keySet().asList().get(m)
-          def allowed_compilers = targetCompilers.get(targetCompiler)
-          echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
+        //def targetCompiler = targetCompilers.keySet().asList().get(m)
+        //def allowed_compilers = targetCompilers.get(targetCompiler)
+        echo "ALLOWED_COMPILERS: ${allowed_compilers} VS. ${toolchain}"
 
-          def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
-          if( allowed_shields.contains(radioshield) && allowed_compilers.contains(toolchain) ) {
-            echo "BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
-            //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
-          }
-          else {
-            echo "NOT_BUILDING: ${target} ${toolchain} ${radioshield} ${meshInterface}"
-          }
+        if (target == "NUCLEO_F401RE" && toolchain == "IAR") {
+          echo "NO2: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+          return
+        }
+
+        def stepName = "${target} ${toolchain} ${radioshield} ${meshInterface}"
+        if( allowed_shields.contains(radioshield) ) {
+          echo "YES: ${target} ${toolchain} ${radioshield} ${meshInterface}"
+          //stepsForParallel[stepName] = buildStep(target, compilerLabel, toolchain, radioshield, meshInterface)
+        }
+        else {
+          echo "NO: ${target} ${toolchain} ${radioshield} ${meshInterface}"
         }
       }
     }
