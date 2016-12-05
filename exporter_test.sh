@@ -36,9 +36,9 @@ done
 
 printf "\n|%15s |%6s |\n" "Tool" "Result"
 printf "|----------------|-------|\n"
-for tool in ${PASSED[*]};do
+for tool in ${PASSED[@]-};do
 	printf "|%15s |%6s |\n" $tool PASS
 done
-for tool in ${FAILED[*]};do
+for tool in ${FAILED[@]-};do
 	printf "|%15s |%6s |\n" $tool FAIL
 done
