@@ -63,7 +63,7 @@ int main()
     start_socket_example((NetworkInterface *)&mesh);    
 
     SocketAddress source_addr;
-    source_addr.set_ip_address("ff02::1");  //multicast address
+    source_addr.set_ip_address("ff05::1");  //multicast address
     UDPSocket sock1((NetworkInterface *)&mesh);
     sock1.set_blocking(true);
     sock1.bind(1234);
