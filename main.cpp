@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "rtos.h"
 #include "NanostackInterface.h"
+#include "socket_example.h"
 
 #define ATMEL   1
 #define MCR20   2
@@ -57,4 +58,34 @@ int main()
         Thread::wait(500);
 
     printf("connected. IP = %s\n", mesh.get_ip_address());
+
+    // Start socket example
+    start_socket_example((NetworkInterface *)&mesh);    
+
+    SocketAddress source_addr;
+    source_addr.set_ip_address("ff02::1");  //multicast address
+    UDPSocket sock1((NetworkInterface *)&mesh);
+    sock1.set_blocking(true);
+    sock1.bind(1234);
+
+    while(true)
+    {
+      Thread::wait(5000);
+    
+      uint8_t * data = (uint8_t *)"on";
+      int ret = sock1.sendto(source_addr, data, strlen((char*)data));
+      if (ret <= 0) {
+          printf("Error with socket sendto: %i\n", ret);
+          continue;
+      }
+      Thread::wait(1000);
+      
+      data = (uint8_t *)"off";
+      ret = sock1.sendto(source_addr, data, strlen((char*)data));
+      if (ret <= 0) {
+          printf("Error with socket sendto: %i\n", ret);
+          continue;    
+      }      
+   }
+
 }
