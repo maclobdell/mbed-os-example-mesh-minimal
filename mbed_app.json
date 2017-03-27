@@ -6,7 +6,7 @@
         },
         "radio-type":{
             "help": "options are ATMEL, MCR20, NCS36510",
-            "value": "ATMEL"
+            "value": "MCR20"
         },
         "mesh-type":{
             "help": "options are MESH_LOWPAN, MESH_THREAD",
